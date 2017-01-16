@@ -2,12 +2,16 @@ package com.example.mayank.singleboom;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
 
@@ -18,6 +22,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -36,7 +41,7 @@ public class MapsActivity extends AppCompatActivity implements
 
     //Our Map
     private GoogleMap mMap;
-             private BoomMenuButton bmb;
+
     //To store longitude and latitude from map
     public double longitude;
     public double latitude;
@@ -49,6 +54,33 @@ public class MapsActivity extends AppCompatActivity implements
     //Google ApiClient
     private GoogleApiClient googleApiClient;
 
+             private BoomMenuButton bmb;
+
+             private static int[] imageResources = new int[]{
+                     R.drawable.bee,
+                     R.drawable.bat,
+                     R.drawable.bee,
+                     R.drawable.bat,
+             };
+             private static String[] stringResources = new String[]{
+                     "bee",
+                     "bat",
+                     "bee",
+                     "bat",
+             };
+             private static int imageResourceIndex = 0;
+             private static int stringResourceIndex = 0;
+
+             static int getImageResource() {
+                 if (imageResourceIndex >= imageResources.length) imageResourceIndex = 0;
+                 return imageResources[imageResourceIndex++];
+             }
+
+             static String getStringResource() {
+                 if (stringResourceIndex >= stringResources.length) stringResourceIndex = 0;
+                 return stringResources[stringResourceIndex++];
+             }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,132 +88,22 @@ public class MapsActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_maps);
         bmb = (BoomMenuButton) findViewById(R.id.bmb);
 
+
+
         for (int i = 0; i < bmb.getPiecePlaceEnum().pieceNumber(); i++) {
             TextOutsideCircleButton.Builder builder = new TextOutsideCircleButton.Builder()
                     .listener(new OnBMClickListener() {
                         @Override
                         public void onBoomButtonClick(int index) {
-                            // When the boom-button corresponding this builder is clicked.
-                            Toast.makeText(MapsActivity.this, "Clicked " + index, Toast.LENGTH_SHORT).show();
+                            Log.e("listener","called "+index+"");
+                            if(index == 0)
+                                startFriendThread();
                         }
                     })
-
-                    // Whether the image-view should rotate.
-                    .rotateImage(false)
-
-                    // Whether the text-view should rotate.
-                    .rotateText(false)
-
-                    // Whether the boom-button should have a shadow effect.
-                    .shadowEffect(true)
-
-                    // Set the horizontal shadow-offset of the boom-button.
-                    .shadowOffsetX(20)
-
-                    // Set the vertical shadow-offset of the boom-button.
-                    .shadowOffsetY(0)
-
-                    // Set the radius of shadow of the boom-button.
-                    .shadowRadius(Util.dp2px(20))
-
-                    // Set the color of the shadow of boom-button.
-
-                    // Set the image resource when boom-button is at normal-state.
-                    .normalImageRes(R.drawable.bee)
-
-                    // Set the image drawable when boom-button is at normal-state.
-
-                    // Set the image resource when boom-button is at highlighted-state.
-                    .highlightedImageRes(R.drawable.bee)
-
-                    // Set the image drawable when boom-button is at highlighted-state.
-
-
-                    // Set the image resource when boom-button is at unable-state.
-                    .unableImageRes(R.drawable.bee)
-
-                    // Set the image drawable when boom-button is at unable-state.
-
-
-                    // Set the rect of image.
-                    // By this method, you can set the position and size of the image-view in boom-button.
-                    // For example, builder.imageRect(new Rect(0, 50, 100, 100)) will make the
-                    // image-view's size to be 100 * 50 and margin-top to be 50 pixel.
-
-
-                    // Set the padding of image.
-                    // By this method, you can control the padding in the image-view.
-                    // For instance, builder.imagePadding(new Rect(10, 10, 10, 10)) will make the
-                    // image-view content 10-pixel padding to itself.
-
-
-                    // Set the text resource when boom-button is at normal-state.
-                    .normalTextRes(R.string.text_outside_circle_button_text_normal)
-
-                    // Set the text resource when boom-button is at highlighted-state.
-                    .highlightedTextRes(R.string.text_outside_circle_button_text_highlighted)
-
-                    // Set the text resource when boom-button is at unable-state.
-                    .unableTextRes(R.string.text_outside_circle_button_text_unable)
-
-                    // Set the text when boom-button is at normal-state.
-                    .normalText("Put your normal text here")
-
-                    // Set the text when boom-button is at highlighted-state.
-                    .highlightedText("Put your highlighted text here")
-
-                    // Set the text when boom-button is at unable-state.
-                    .unableText("Unable!")
-
-                    // Set the color of text when boom-button is at normal-state.
-
-
-                    // Set the top-margin between text-view and the circle button.
-                    // Don't need to mind the shadow, BMB will mind this in code.
-                    .textTopMargin(20)
-
-                    // The width of text-view.
-                    .textWidth(200)
-
-                    // The height of text-view
-                    .textHeight(50)
-
-                    // Set the padding of text.
-                    // By this method, you can control the padding in the text-view.
-                    // For instance, builder.textPadding(new Rect(10, 10, 10, 10)) will make the
-                    // text-view content 10-pixel padding to itself.
-
-
-                    // Set the typeface of the text.
-
-
-                    // Set the maximum of the lines of text-view.
-                    .maxLines(2)
-
-                    // Set the gravity of text-view.
-                    .textGravity(Gravity.CENTER)
-
-                    // Set the ellipsize of the text-view.
-                    .ellipsize(TextUtils.TruncateAt.MIDDLE)
-
-                    // Set the text size of the text-view.
-                    .textSize(10)
-
-                    // Whether the boom-button should have a ripple effect.
-                    .rippleEffect(true)
-
-                    // The color of boom-button when it is at normal-state.
-
-
-                    // Whether the boom-button is unable, default value is false.
-                    .unable(true)
-
-                    // The radius of boom-button, in pixel.
-                    .buttonRadius(Util.dp2px(40));
+                    .normalImageRes(getImageResource())
+                    .normalText(String.valueOf(getStringResource()));
             bmb.addBuilder(builder);
         }
-
-
 
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -216,6 +138,7 @@ public class MapsActivity extends AppCompatActivity implements
 
         super.onStart();
         startThread();
+        startFriendThread();
     }
 
     @Override
@@ -380,12 +303,179 @@ public class MapsActivity extends AppCompatActivity implements
         };
         th.start();
     }
+             void startFriendThread()
+             {
+                 Log.e("inside ","SFT");
+                 Thread th=new Thread(){
+
+                     @Override
+                     public void run(){
+                         //
+
+                         try
+                         {
+                             Log.e("inside","try");
+                             for (i =0;i<3;i++)
+                             {
+                                 Log.e("val of i ",i+"");
+                                 runOnUiThread(new Runnable() {
+                                     @Override
+                                     public void run() {
+                                         try {
+                                             double latitude = 28.6139;
+                                             double longitude = 77.2090;
+
+
+                                             if(i!=0) {
+                                                 for (int k = 0; k < markers.size(); k++) {
+                                                     Marker m = markers.get(k);
+                                                     m.remove();
+                                                 }
+                                             }
+                                             for (int j = 0; j < 3; j++) {
+                                                 if(i==0)
+                                                 {
+                                                     latitude = latitude/2;
+
+                                                 }
+                                                 if(i==1)
+                                                 {
+                                                     longitude = longitude/2;
+                                                 }
+                                                 if(i==2)
+                                                 {
+                                                     latitude = latitude/2;
+                                                     longitude = longitude/2;
+                                                 }
+                                                 latitude = latitude + (3*j);
+                                                 longitude += (4*j);
+                                                 getUpdatedCurrentLocation(latitude, longitude);
+                                             }
+                                             for(int x=0;x<markers.size();x++)
+                                             {
+                                                 Marker mm = markers.get(x);
+                                                 mm.showInfoWindow();
+                                             }
+
+                                         }
+                                         catch(Exception e)
+                                         {
+                                             e.printStackTrace();
+                                         }
+                                     }
+                                 });
+                                 Thread.sleep(5000);
+
+                             }
+                         }
+                         catch (InterruptedException e) {
+                         }
+
+                     }
+                 };
+                 th.start();
+             }
+
+             public void getUpdatedCurrentLocation(double latitude, double longitude) {
+                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                     // TODO: Consider calling
+
+                     Log.e("inside ","to do consider");
+                     return;
+                 }
+                 Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+
+                 //Getting longitude and latitude
+
+
+                 LatLng latLngg = new LatLng(latitude, longitude);
+
+                 Log.e("lat",latitude+"");
+                 Log.e("long",longitude+"");
+
+       /* Bitmap.Config conf = Bitmap.Config.ARGB_8888;
+        Bitmap bmp = Bitmap.createBitmap(80, 80, conf);
+
+        Bitmap resized = Bitmap.createScaledBitmap(bmp, 40, 40, true);
+*/
+        /*Bitmap bmpp = Bitmap.createScaledBitmap(orginalBitmap, 40, 40, true);
+        Bitmap.Config conf = Bitmap.Config.ARGB_8888;
+*/
+                 //      Canvas canvas1 = new Canvas(resized);
+
+                 //Bitmap bmpp = Bitmap.createScaledBitmap(orginalBitmap, 40, 40, true);
+// paint defines the text color, stroke width and size
+      /*  Paint color = new Paint();
+        color.setTextSize(35);
+        color.setColor(Color.BLUE);*/
+
+// modify canvas
+       /* canvas1.drawBitmap(BitmapFactory.decodeResource(getResources(),
+                R.drawable.amir), 0,0, color);
+*/
+// add marker to Map
+       /* Marker marker = mMap.addMarker(new MarkerOptions().position(latLngg)
+                .icon(BitmapDescriptorFactory.fromBitmap(resized))
+                // Specifies the anchor to be at a particular point in the marker image.
+                .anchor(0.5f, 1));
+       */    // mMap.addMarker(new MarkerOptions().position(latLngg).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                 /// Marker marker = mMap.addMarker(new MarkerOptions().position(latLngg).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).title("mayank nayyar"));
+                 // Marker marker = mMap.addMarker(new MarkerOptions().position(latLngg).icon(BitmapDescriptorFactory.fromResource(R.drawable.mark)));
+                 // marker.showInfoWindow();
+
+
+                 Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(),
+                         R.drawable.marker3);
+
+                 Bitmap bmp2 = bitmap1.copy(bitmap1.getConfig(), true);
+
+       /* Bitmap.Config conf = Bitmap.Config.ARGB_8888;
+        Bitmap bitmap1 = Bitmap.createBitmap(BitmapFactory.decodeResource(getResources(),
+                R.drawable.markk));*/
+                 Bitmap bitmap2  = Bitmap.createBitmap(BitmapFactory.decodeResource(getResources(),
+                         R.drawable.hot));
+
+                 Bitmap hott = bitmap2.copy(bitmap2.getConfig(), true);
+                 int bitmap1Width = bitmap1.getWidth();
+                 int bitmap1Height = bitmap1.getHeight();
+                 int bitmap2Width = bitmap2.getWidth();
+                 int bitmap2Height = bitmap2.getHeight();
+
+                 float marginLeft = (float) (bitmap1Width * 0.5 - bitmap2Width * 0.5);
+                 float marginTop = (float) (bitmap1Height * 0.5 - bitmap2Height * 0.5);
+
+
+       /*Bitmap overlayBitmap = Bitmap.createBitmap(BitmapFactory.decodeResource(getResources(),
+               R.drawable.markk));
+       */ Canvas canvas = new Canvas(bmp2);
+
+        /*canvas.drawBitmap(BitmapFactory.decodeResource(getResources(),
+                R.drawable.markk), new Matrix(), null);
+        */canvas.drawBitmap(BitmapFactory.decodeResource(getResources(),
+                         R.drawable.hot), marginLeft, marginTop, null);
+
+                 Marker marker = mMap.addMarker(new MarkerOptions().position(latLngg)
+                         .icon(BitmapDescriptorFactory.fromBitmap(bmp2))
+                         // Specifies the anchor to be at a particular point in the marker image.
+                         .anchor(0.5f, 1));
+
+                 mMap.moveCamera(CameraUpdateFactory.newLatLng(latLngg));
+
+                 //Animating the camera
+                 mMap.animateCamera(CameraUpdateFactory.zoomTo(2));
+
+                 markers.add(marker);
+
+
+
+             }
 
 
 
 
 
-}
+
+         }
 
 /*
 class updatemymapp extends AsyncTask<Void,Void,Void>

@@ -26,13 +26,6 @@
             android:background="#cc3b60a7"
             android:orientation="horizontal">
 
-            <!--      <ImageButton
-                      android:id="@+id/buttonCurrent"
-                      android:layout_width="50dp"
-                      android:layout_height="50dp"
-                      android:layout_margin="15dp"
-                      android:background="@drawable/current" />
-      -->
 
 
         </LinearLayout>
