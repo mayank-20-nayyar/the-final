@@ -73,6 +73,20 @@ public class MapsActivity extends AppCompatActivity implements
 
     public double longitude;
     public double latitude;
+             private static int[] imageResources = new int[]{
+                     R.drawable.friends,
+                     R.drawable.messages,
+                     R.drawable.about,
+                     R.drawable.signout,
+             };
+             private static String[] stringResources = new String[]{
+                     "Friends",
+                     "Message",
+                     "About Us",
+                     "Sign Out",
+             };
+             private static int imageResourceIndex = 0;
+             private static int stringResourceIndex = 0;
 
              public int i;
              Button b;
@@ -96,22 +110,6 @@ public class MapsActivity extends AppCompatActivity implements
 
     private GoogleApiClient googleApiClient;
 
-             private BoomMenuButton bmb;
-
-             private static int[] imageResources = new int[]{
-                     R.drawable.bee,
-                     R.drawable.bat,
-                     R.drawable.bee,
-                     R.drawable.bat,
-             };
-             private static String[] stringResources = new String[]{
-                     "bee",
-                     "bat",
-                     "bee",
-                     "bat",
-             };
-             private static int imageResourceIndex = 0;
-             private static int stringResourceIndex = 0;
 
              static int getImageResource() {
                  if (imageResourceIndex >= imageResources.length) imageResourceIndex = 0;
@@ -138,14 +136,14 @@ public class MapsActivity extends AppCompatActivity implements
                         @Override
                         public void onBoomButtonClick(int index) {
                             Log.e("listener","called "+index+"");
-                            if(index == 0)
-                                startFriendThread();
+
                         }
                     })
                     .normalImageRes(getImageResource())
                     .normalText(String.valueOf(getStringResource()));
             bmb.addBuilder(builder);
         }
+
 
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
