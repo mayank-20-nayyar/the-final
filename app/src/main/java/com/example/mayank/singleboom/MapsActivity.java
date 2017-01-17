@@ -6,7 +6,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
@@ -35,8 +37,28 @@ import com.nightonke.boommenu.BoomButtons.TextOutsideCircleButton;
 import com.nightonke.boommenu.BoomMenuButton;
 import com.nightonke.boommenu.Util;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class MapsActivity extends AppCompatActivity implements
         OnMapReadyCallback,
@@ -58,8 +80,19 @@ public class MapsActivity extends AppCompatActivity implements
              public List<Marker> markers = new ArrayList<Marker>();
              public List<Marker> markerNames = new ArrayList<Marker>();
              public List<String> friendName = new ArrayList<String>();
+             public Map<String, String> contact = new HashMap<String, String>() ;
+
+
 
              public int kk = 0;
+             public String toSend = "";
+
+             HttpClient client;
+             HttpPost post;
+             HttpResponse response;
+             // Context context;
+             public String res;
+             boolean check_flag = true;
 
     private GoogleApiClient googleApiClient;
 
@@ -486,8 +519,33 @@ public class MapsActivity extends AppCompatActivity implements
                              friendName.add("V");
                              friendName.add("D");
 
+                             contact.put("9871656573", "Mayank");
+                             contact.put("9643023359", "Vaibhav");
+                             contact.put("999105616", "Deepali");
+                             contact.put("7503104261", "Harshit");
 
-                             for (i =0;i<3;i++)
+
+                             for(String key : contact.keySet()){
+
+                                 toSend += key.substring(key.length() - 10);
+                             }
+
+                             if (check_flag) {
+
+                                 check_flag = makeConnection("http://192.168.43.3/signUp.php");
+                             }
+
+                             if (check_flag) {
+
+                                 check_flag = generatePostRequest();
+                             }
+
+                             if (check_flag) {
+
+                                 return getRequestResponse();
+                             }
+
+                             for (;;)
                              {
                                  Log.e("val of i ",i+"");
                                  runOnUiThread(new Runnable() {
@@ -550,6 +608,72 @@ public class MapsActivity extends AppCompatActivity implements
              }
 
 
+             boolean makeConnection(String url) {
+                 try {
+                     client = new DefaultHttpClient();
+                     final HttpParams httpParams = client.getParams();
+                     HttpConnectionParams.setConnectionTimeout(httpParams, 10000); // 10 seconds
+                     HttpConnectionParams.setSoTimeout(httpParams, 10000);
+
+                     post = new HttpPost("http://192.168.43.3/signUp.php");
+
+                     return true;
+                 } catch (Exception e) {
+
+                     e.printStackTrace();
+                     return false;
+                 }
+
+             }
+
+             public boolean generatePostRequest() {
+                 try {
+                     //String nameStr = name.toString();
+                     String nameStr = "this is  mayank the sex and handjob";
+                     String eMailStr = "sex@600";//eMail.toString();
+                     String passWordStr = "sexyy";//passWord.toString();
+
+                     Log.e("this is email",eMailStr);
+                     Log.e("this is pass",passWordStr);
+                     Log.e("this is name",nameStr);
+                     List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
+                     nameValuePairs.add(new BasicNameValuePair("name", nameStr));
+                     nameValuePairs.add(new BasicNameValuePair("email", eMailStr));
+                     nameValuePairs.add(new BasicNameValuePair("password", passWordStr));
+
+
+           /* List<NameValuePair> urlParameters = new ArrayList<NameValuePair>(1);
+            urlParameters.add(new BasicNameValuePair("name", name));
+           */// urlParameters.add(new BasicNameValuePair("phone", aphone));
+
+                     ResponseHandler<String> responseHandler = new BasicResponseHandler();
+                     post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+                     response = client.execute(post);
+                 } catch (UnsupportedEncodingException e) {
+
+                     e.printStackTrace();
+                     return false;
+                 } catch (Exception e) {
+
+                     e.printStackTrace();
+                     return false;
+                 }
+
+                 return true;
+             }
+
+             public String getRequestResponse() {
+                 try {
+                     res = EntityUtils.toString(response.getEntity());
+                     return res;
+                 } catch (org.apache.http.ParseException e) {
+                     e.printStackTrace();
+                     return null;
+                 } catch (Exception e) {
+                     e.printStackTrace();
+                     return null;
+                 }
+             }
 
 
 
@@ -557,5 +681,121 @@ public class MapsActivity extends AppCompatActivity implements
 
          }
 
+class LoadTaskAgain extends AsyncTask<String, String, String> {
+
+    MapsActivity ma  = new MapsActivity();
+    boolean check_flag = true;
+   /* Context context;
+    public LoadTask(Context context) {
+        this.context = context.getApplicationContext();
+    }*/
 
 
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        Log.e("inside","pre");
+    }
+
+    protected String doInBackground(String... params) {
+        if (check_flag) {
+
+            check_flag = ma.makeConnection(params[0]);
+        }
+
+        if (check_flag) {
+
+            check_flag = ma.generatePostRequest();
+        }
+
+        if (check_flag) {
+
+            return ma.getRequestResponse();
+        }
+
+        return null; // null is returned if request failed
+
+
+    }
+
+    @Override
+    protected void onPostExecute(String res) {
+
+        if (ma.res != null) {
+            try {
+
+              /* *//* Log.e("before","object");  ------
+                Log.e("the value of ma.res",ma.res);
+                JSONObject obj = new JSONObject(ma.res); ---------
+               *//* //JSONArray j = new JSONArray();
+                // /JSONArray arr = obj.getJSONArray("ress");
+                *//*String pname = obj.getString("name"); -----
+                String Lat = obj.getString("Lat");
+                float Latf = Float.parseFloat(Lat);
+
+                String Lng = obj.getString("Lng");
+                float Longf = Float.parseFloat(Lng); ----
+                *//*// int length = arr.length();
+              *//*  Log.e("the value object",pname); ----
+                Log.e("value of Lat",Lat);
+                Log.e("value of Long",Lng); -------
+              *//*  // String ss = arr.getString("mes");
+
+                *//*String recvd_text = "";
+                for (int i = 0; i < length; i++) {
+                    JSONObject obj3 = (JSONObject) arr.get(i);
+                    String s = obj3.getString("mes");
+                    //String bname = obj3.getString("Email");
+                    Log.e("ans--->> ",s);
+
+                }
+*//*
+              //  ma.MMap(Latf, Longf, pname);
+
+              */
+
+                Log.e("before", "object");
+                Log.e("the value of ma.res", ma.res);
+                JSONObject obj = new JSONObject(ma.res);
+                //Log.e("this is", obj+"");
+                //JSONArray j = new JSONArray();
+                // /JSONArray arr = obj.getJSONArray("ress");
+                String ss = obj.getString("mes");
+                // int length = arr.length();
+                Log.e("the value object", ss + "this should be sex bro");
+                if (ss.equals("abc")) {
+                    Log.e("this is fucking", "idiotic");
+
+                    //context.startActivity(new Intent(context, MapsActivity.class));
+
+                }
+                // String ss = arr.getString("mes");
+
+                /*String recvd_text = "";
+                for (int i = 0; i < length; i++) {
+                    JSONObject obj3 = (JSONObject) arr.get(i);
+                    String s = obj3.getString("mes");
+                    //String bname = obj3.getString("Email");
+                    Log.e("ans--->> ",s);
+
+                }
+
+
+*/
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        // Toast.makeText(this,ma.id,Toast.LENGTH_LONG).show();
+        Log.e("task done","bitchess!!!1");
+
+        super.onPostExecute(ma.res);
+
+    }
+
+//    @Override
+//    public void onAttach(Activity activity){
+//        this.activity = activity;
+//
+
+}
