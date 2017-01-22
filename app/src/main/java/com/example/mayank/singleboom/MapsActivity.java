@@ -1,6 +1,8 @@
 package com.example.mayank.singleboom;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -94,8 +96,9 @@ public class MapsActivity extends AppCompatActivity implements
              public List<Marker> markers = new ArrayList<Marker>();
              public List<Marker> markerNames = new ArrayList<Marker>();
              public List<String> friendName = new ArrayList<String>();
-             public Map<String, String> contact = new HashMap<String, String>() ;
-
+             //public Map<String, String> contact = new HashMap<String, String>() ;
+             public HashMap<String, String> contact = new HashMap<String, String>();
+             public BoomMenuButton bmb;
 
 
              public int kk = 0;
@@ -106,6 +109,7 @@ public class MapsActivity extends AppCompatActivity implements
              HttpResponse response;
              // Context context;
              public String res;
+             public String ress;
              boolean check_flag = true;
 
     private GoogleApiClient googleApiClient;
@@ -136,6 +140,11 @@ public class MapsActivity extends AppCompatActivity implements
                         @Override
                         public void onBoomButtonClick(int index) {
                             Log.e("listener","called "+index+"");
+                            if(index == 0)
+                            {
+                                Intent i = new Intent(getApplicationContext(), ContactActivity.class);
+                                startActivityForResult(i, 1);
+                            }
 
                         }
                     })
@@ -161,6 +170,24 @@ public class MapsActivity extends AppCompatActivity implements
 
 
     }
+
+             @Override
+             protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+                 Log.e("the request code", requestCode + "");
+                 if (requestCode == 1) {
+                     if(resultCode == Activity.RESULT_OK){
+                         /*String result = data.getStringExtra("result");
+                         Toast.makeText(this, result, Toast.LENGTH_LONG).show();
+                         */
+                         contact = (HashMap<String, String>)data.getSerializableExtra("result");
+                         startFriendThread();
+
+                     }
+                     if (resultCode == Activity.RESULT_CANCELED) {
+                         //Write your code if there's no result
+                     }
+                 }
+             }//onActivityResult
       //  moveMap();
 
         //Initializing views and adding onclick listeners
@@ -506,7 +533,7 @@ public class MapsActivity extends AppCompatActivity implements
 
                          try
                          {
-                             Log.e("inside","try");
+                             /*Log.e("inside","try");
                              friendName.add("Mayank");
                              friendName.add("Vaibhav");
                              friendName.add("Dopu");
@@ -521,7 +548,7 @@ public class MapsActivity extends AppCompatActivity implements
                              contact.put("9643023359", "Vaibhav");
                              contact.put("999105616", "Deepali");
                              contact.put("7503104261", "Harshit");
-
+*/
 
                              for(String key : contact.keySet()){
 
@@ -530,10 +557,10 @@ public class MapsActivity extends AppCompatActivity implements
 
                              if (check_flag) {
 
-                                 check_flag = makeConnection("http://192.168.43.3/signUp.php");
+                                 check_flag = makeConnection("http://192.168.43.3/retrieveContact.php");
                              }
 
-                             if (check_flag) {
+                            /* if (check_flag) {
 
                                  check_flag = generatePostRequest();
                              }
@@ -541,16 +568,91 @@ public class MapsActivity extends AppCompatActivity implements
                              if (check_flag) {
 
                                  return getRequestResponse();
-                             }
+                             }*/
 
                              for (;;)
                              {
-                                 Log.e("val of i ",i+"");
+
                                  runOnUiThread(new Runnable() {
                                      @Override
                                      public void run() {
                                          try {
-                                             double latitude = 28.6139;
+
+                                             if (check_flag) {
+
+                                                 check_flag = generatePostRequest();
+                                             }
+
+                                             if (check_flag) {
+
+                                                 ress  = getRequestResponse();
+                                             }
+                                             if (ress != null) {
+                                                 try {
+
+              /* *//* Log.e("before","object");  ------
+                Log.e("the value of ma.res",ma.res);
+                JSONObject obj = new JSONObject(ma.res); ---------
+               *//* //JSONArray j = new JSONArray();
+                // /JSONArray arr = obj.getJSONArray("ress");
+                *//*String pname = obj.getString("name"); -----
+                String Lat = obj.getString("Lat");
+                float Latf = Float.parseFloat(Lat);
+
+                String Lng = obj.getString("Lng");
+                float Longf = Float.parseFloat(Lng); ----
+                *//*// int length = arr.length();
+              *//*  Log.e("the value object",pname); ----
+                Log.e("value of Lat",Lat);
+                Log.e("value of Long",Lng); -------
+              *//*  // String ss = arr.getString("mes");
+
+                *//*String recvd_text = "";
+                for (int i = 0; i < length; i++) {
+                    JSONObject obj3 = (JSONObject) arr.get(i);
+                    String s = obj3.getString("mes");
+                    //String bname = obj3.getString("Email");
+                    Log.e("ans--->> ",s);
+
+                }
+*//*
+              //  ma.MMap(Latf, Longf, pname);
+
+              */
+
+                                                     Log.e("before", "object");
+                                                     Log.e("the value of ma.res", ress);
+                                                     JSONObject obj = new JSONObject(ress);
+                                                     //Log.e("this is", obj+"");
+                                                     //JSONArray j = new JSONArray();
+                                                     // /JSONArray arr = obj.getJSONArray("ress");
+                                                     String ss = obj.getString("mes");
+                                                     // int length = arr.length();
+                                                     Log.e("the value object", ss + "this should be sex bro");
+                                                     if (ss.equals("abc")) {
+                                                         Log.e("this is fucking", "idiotic");
+
+                                                         //context.startActivity(new Intent(context, MapsActivity.class));
+
+                                                     }
+                                                     // String ss = arr.getString("mes");
+
+                /*String recvd_text = "";
+                for (int i = 0; i < length; i++) {
+                    JSONObject obj3 = (JSONObject) arr.get(i);
+                    String s = obj3.getString("mes");
+                    //String bname = obj3.getString("Email");
+                    Log.e("ans--->> ",s);
+
+                }
+
+
+*/
+                                                 } catch (JSONException e) {
+                                                     e.printStackTrace();
+                                                 }
+                                             }
+                                         /*    double latitude = 28.6139;
                                              double longitude = 77.2090;
                                              String name = "";
 
@@ -585,7 +687,7 @@ public class MapsActivity extends AppCompatActivity implements
                                                  Log.e("the value of friend",name);
                                                  getUpdatedCurrentLocation(latitude, longitude, name);
                                              }
-                                             kk += 3;
+                                             kk += 3;*/
                                          }
                                          catch(Exception e)
                                          {
@@ -613,7 +715,7 @@ public class MapsActivity extends AppCompatActivity implements
                      HttpConnectionParams.setConnectionTimeout(httpParams, 10000); // 10 seconds
                      HttpConnectionParams.setSoTimeout(httpParams, 10000);
 
-                     post = new HttpPost("http://192.168.43.3/signUp.php");
+                     post = new HttpPost("http://192.168.43.3/retrieveContact.php");
 
                      return true;
                  } catch (Exception e) {
@@ -627,17 +729,18 @@ public class MapsActivity extends AppCompatActivity implements
              public boolean generatePostRequest() {
                  try {
                      //String nameStr = name.toString();
-                     String nameStr = "this is  mayank the sex and handjob";
+                    /* String nameStr = "this is  mayank the sex and handjob";
                      String eMailStr = "sex@600";//eMail.toString();
                      String passWordStr = "sexyy";//passWord.toString();
-
+*//*
                      Log.e("this is email",eMailStr);
                      Log.e("this is pass",passWordStr);
-                     Log.e("this is name",nameStr);
-                     List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
-                     nameValuePairs.add(new BasicNameValuePair("name", nameStr));
+                     Log.e("this is name",nameStr);*/
+                     List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+                     /*nameValuePairs.add(new BasicNameValuePair("name", nameStr));
                      nameValuePairs.add(new BasicNameValuePair("email", eMailStr));
-                     nameValuePairs.add(new BasicNameValuePair("password", passWordStr));
+                     nameValuePairs.add(new BasicNameValuePair("password", passWordStr));*/
+                     nameValuePairs.add(new BasicNameValuePair("numberString", toSend));
 
 
            /* List<NameValuePair> urlParameters = new ArrayList<NameValuePair>(1);
@@ -679,14 +782,17 @@ public class MapsActivity extends AppCompatActivity implements
 
          }
 
+/*
 class LoadTaskAgain extends AsyncTask<String, String, String> {
 
     MapsActivity ma  = new MapsActivity();
     boolean check_flag = true;
-   /* Context context;
+   */
+/* Context context;
     public LoadTask(Context context) {
         this.context = context.getApplicationContext();
-    }*/
+    }*//*
+
 
 
     @Override
@@ -722,24 +828,40 @@ class LoadTaskAgain extends AsyncTask<String, String, String> {
         if (ma.res != null) {
             try {
 
-              /* *//* Log.e("before","object");  ------
+              */
+/* *//*
+*/
+/* Log.e("before","object");  ------
                 Log.e("the value of ma.res",ma.res);
                 JSONObject obj = new JSONObject(ma.res); ---------
-               *//* //JSONArray j = new JSONArray();
+               *//*
+*/
+/* //JSONArray j = new JSONArray();
                 // /JSONArray arr = obj.getJSONArray("ress");
-                *//*String pname = obj.getString("name"); -----
+                *//*
+*/
+/*String pname = obj.getString("name"); -----
                 String Lat = obj.getString("Lat");
                 float Latf = Float.parseFloat(Lat);
 
                 String Lng = obj.getString("Lng");
                 float Longf = Float.parseFloat(Lng); ----
-                *//*// int length = arr.length();
-              *//*  Log.e("the value object",pname); ----
+                *//*
+*/
+/*//*
+/ int length = arr.length();
+              *//*
+*/
+/*  Log.e("the value object",pname); ----
                 Log.e("value of Lat",Lat);
                 Log.e("value of Long",Lng); -------
-              *//*  // String ss = arr.getString("mes");
+              *//*
+*/
+/*  // String ss = arr.getString("mes");
 
-                *//*String recvd_text = "";
+                *//*
+*/
+/*String recvd_text = "";
                 for (int i = 0; i < length; i++) {
                     JSONObject obj3 = (JSONObject) arr.get(i);
                     String s = obj3.getString("mes");
@@ -748,9 +870,12 @@ class LoadTaskAgain extends AsyncTask<String, String, String> {
 
                 }
 *//*
+*/
+/*
               //  ma.MMap(Latf, Longf, pname);
 
-              */
+              *//*
+
 
                 Log.e("before", "object");
                 Log.e("the value of ma.res", ma.res);
@@ -769,7 +894,8 @@ class LoadTaskAgain extends AsyncTask<String, String, String> {
                 }
                 // String ss = arr.getString("mes");
 
-                /*String recvd_text = "";
+                */
+/*String recvd_text = "";
                 for (int i = 0; i < length; i++) {
                     JSONObject obj3 = (JSONObject) arr.get(i);
                     String s = obj3.getString("mes");
@@ -779,7 +905,8 @@ class LoadTaskAgain extends AsyncTask<String, String, String> {
                 }
 
 
-*/
+*//*
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -791,9 +918,7 @@ class LoadTaskAgain extends AsyncTask<String, String, String> {
 
     }
 
-//    @Override
-//    public void onAttach(Activity activity){
-//        this.activity = activity;
-//
+
 
 }
+*/
