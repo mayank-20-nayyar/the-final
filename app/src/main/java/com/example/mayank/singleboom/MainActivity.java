@@ -125,9 +125,14 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 Log.e("the  but","is clicked");
-                new LoadTask().execute("http://192.168.43.3/signUp.php");
+                startAsync();
+
             }
         });
+    }
+
+    void startAsync(){
+        new LoadTask(this).execute("https://sporophoric-reservo.000webhostapp.com/signUp.php");
     }
     boolean makeConnection(String url) {
         try {
@@ -136,7 +141,8 @@ public class MainActivity extends AppCompatActivity {
             HttpConnectionParams.setConnectionTimeout(httpParams, 10000); // 10 seconds
             HttpConnectionParams.setSoTimeout(httpParams, 10000);
 
-            post = new HttpPost("http://192.168.43.3/signUp.php");
+            //post = new HttpPost("http://192.168.43.3/signUp.php");
+            post = new HttpPost("https://sporophoric-reservo.000webhostapp.com/signUp.php");
 
             return true;
         } catch (Exception e) {
@@ -206,8 +212,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void nextStep(){
         Log.e("this is in nextStep","this");
-        Log.e("app context", getApplicationContext()+"");
-        Intent i = new Intent(this, MapsActivity.class);
+        //Log.e("app context", getApplicationContext()+"");
+        Intent i = new Intent(MainActivity.this, MapsActivity.class);
         startActivity(i);
     }
 
@@ -216,8 +222,16 @@ public class MainActivity extends AppCompatActivity {
 
 class LoadTask extends AsyncTask<String, String, String> {
 
-    MainActivity ma  = new MainActivity();
+    MainActivity ma ;
     boolean check_flag = true;
+
+    public LoadTask(MainActivity ma) {
+        this.ma = ma;
+    }
+
+
+
+
    /* Context context;
     public LoadTask(Context context) {
         this.context = context.getApplicationContext();
@@ -234,16 +248,19 @@ class LoadTask extends AsyncTask<String, String, String> {
         if (check_flag) {
 
             check_flag = ma.makeConnection(params[0]);
+            Log.e("f", check_flag + "");
         }
 
         if (check_flag) {
 
             check_flag = ma.generatePostRequest();
+            Log.e("s", check_flag + "");
         }
 
         if (check_flag) {
 
             return ma.getRequestResponse();
+
         }
 
         return null; // null is returned if request failed
@@ -257,35 +274,7 @@ class LoadTask extends AsyncTask<String, String, String> {
         if (ma.res != null) {
             try {
 
-              /* *//* Log.e("before","object");  ------
-                Log.e("the value of ma.res",ma.res);
-                JSONObject obj = new JSONObject(ma.res); ---------
-               *//* //JSONArray j = new JSONArray();
-                // /JSONArray arr = obj.getJSONArray("ress");
-                *//*String pname = obj.getString("name"); -----
-                String Lat = obj.getString("Lat");
-                float Latf = Float.parseFloat(Lat);
 
-                String Lng = obj.getString("Lng");
-                float Longf = Float.parseFloat(Lng); ----
-                *//*// int length = arr.length();
-              *//*  Log.e("the value object",pname); ----
-                Log.e("value of Lat",Lat);
-                Log.e("value of Long",Lng); -------
-              *//*  // String ss = arr.getString("mes");
-
-                *//*String recvd_text = "";
-                for (int i = 0; i < length; i++) {
-                    JSONObject obj3 = (JSONObject) arr.get(i);
-                    String s = obj3.getString("mes");
-                    //String bname = obj3.getString("Email");
-                    Log.e("ans--->> ",s);
-
-                }
-*//*
-              //  ma.MMap(Latf, Longf, pname);
-
-              */
 
                 Log.e("before", "object");
                 Log.e("the value of ma.res", ma.res);
@@ -296,25 +285,13 @@ class LoadTask extends AsyncTask<String, String, String> {
                 String ss = obj.getString("mes");
                 // int length = arr.length();
                 Log.e("the value object", ss + "this should be sex bro");
-                if (ss.equals("abc")) {
+                if (ss.equals("yes")) {
                     Log.e("this is fucking", "idiotic");
 
                     //context.startActivity(new Intent(context, MapsActivity.class));
                     ma.nextStep();
                 }
-                // String ss = arr.getString("mes");
 
-                /*String recvd_text = "";
-                for (int i = 0; i < length; i++) {
-                    JSONObject obj3 = (JSONObject) arr.get(i);
-                    String s = obj3.getString("mes");
-                    //String bname = obj3.getString("Email");
-                    Log.e("ans--->> ",s);
-
-                }
-
-
-*/
             } catch (JSONException e) {
                 e.printStackTrace();
             }
