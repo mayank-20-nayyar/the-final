@@ -141,9 +141,14 @@ public class MapsActivity extends AppCompatActivity implements
                             Log.e("listener","called "+index+"");
                             if(index == 0)
                             {
-                                Intent i = new Intent(getApplicationContext(), ContactActivity.class);
-                                startActivityForResult(i, 1);
+                                Intent i1 = new Intent(getApplicationContext(), ContactActivity.class);
+                                startActivityForResult(i1, 1);
                             }
+                            if(index == 2) {
+                                //Intent i2 = new Intent(getApplicationContext(), SignOutActivity.class);
+                                //startActivity(i2);
+                            }
+
 
                         }
                     })
@@ -465,7 +470,7 @@ public class MapsActivity extends AppCompatActivity implements
 
                              if (check_flag) {
 
-                                 check_flag = makeConnection("http://192.168.43.3/retrieveContact.php");
+                                 check_flag = makeConnection("https://sporophoric-reservo.000webhostapp.com/retrieveContact.php");
                              }
 
 
@@ -491,16 +496,16 @@ public class MapsActivity extends AppCompatActivity implements
 
 
                                                      Log.e("before", "object");
-                                                     Log.e("the value of ma.res", ress);
+                                                     Log.e("the value of friend", ress);
                                                      JSONObject obj = new JSONObject(ress);
 
-                                                     String ss = obj.getString("mes");
+                                                     String ss = obj.getString("mess");
 
                                                      Log.e("the value object", ss + "this should be sex bro");
-                                                     if (ss.equals("abc")) {
-                                                         Log.e("this is fucking", "idiotic");
+                                                     if (ss.equals("yes")) {
+                                                         Log.e("the value of the friend","yes");
 
-
+                                                        //getUpdatedCurrentLocation();
                                                      }
 
                                                  } catch (JSONException e) {
@@ -534,7 +539,7 @@ public class MapsActivity extends AppCompatActivity implements
                      HttpConnectionParams.setConnectionTimeout(httpParams, 10000); // 10 seconds
                      HttpConnectionParams.setSoTimeout(httpParams, 10000);
 
-                     post = new HttpPost("http://192.168.43.3/retrieveContact.php");
+                     post = new HttpPost("https://sporophoric-reservo.000webhostapp.com/retrieveContact.php");
 
                      return true;
                  } catch (Exception e) {
