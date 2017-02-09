@@ -96,7 +96,6 @@ public class MapsActivity extends AppCompatActivity implements
              public List<Marker> markers = new ArrayList<Marker>();
              public List<Marker> markerNames = new ArrayList<Marker>();
              public List<String> friendName = new ArrayList<String>();
-             //public Map<String, String> contact = new HashMap<String, String>() ;
              public HashMap<String, String> contact = new HashMap<String, String>();
              public BoomMenuButton bmb;
 
@@ -112,7 +111,7 @@ public class MapsActivity extends AppCompatActivity implements
              public String ress;
              boolean check_flag = true;
 
-    private GoogleApiClient googleApiClient;
+            private GoogleApiClient googleApiClient;
 
 
              static int getImageResource() {
@@ -176,28 +175,16 @@ public class MapsActivity extends AppCompatActivity implements
                  Log.e("the request code", requestCode + "");
                  if (requestCode == 1) {
                      if(resultCode == Activity.RESULT_OK){
-                         /*String result = data.getStringExtra("result");
-                         Toast.makeText(this, result, Toast.LENGTH_LONG).show();
-                         */
+
                          contact = (HashMap<String, String>)data.getSerializableExtra("result");
                          startFriendThread();
 
                      }
                      if (resultCode == Activity.RESULT_CANCELED) {
-                         //Write your code if there's no result
+
                      }
                  }
-             }//onActivityResult
-      //  moveMap();
-
-        //Initializing views and adding onclick listeners
-       // buttonSave = (ImageButton) findViewById(R.id.buttonSave);
-    //    buttonCurrent = (ImageButton) findViewById(R.id.buttonCurrent);
-       // buttonView = (ImageButton) findViewById(R.id.buttonView);
-       // buttonSave.setOnClickListener(this);
-  //      buttonCurrent.setOnClickListener(this);
-       // buttonView.setOnClickListener(this);
-
+             }
 
     @Override
     protected void onStart() {
@@ -217,6 +204,7 @@ public class MapsActivity extends AppCompatActivity implements
     //Getting current location
     public void getCurrentLocation() {
         mMap.clear();
+        Log.e("inside","getcurrentlocation");
         //Creating a location object
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -231,6 +219,7 @@ public class MapsActivity extends AppCompatActivity implements
         Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
         if (location != null) {
             //Getting longitude and latitude
+            Log.e("inside","getlocation");
             longitude = location.getLongitude();
             latitude = location.getLatitude();
    mMap.animateCamera(CameraUpdateFactory.zoomTo(40));
@@ -282,9 +271,6 @@ public class MapsActivity extends AppCompatActivity implements
 
 
                  mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-
-
-                // mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
 
                  Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
@@ -423,69 +409,7 @@ public class MapsActivity extends AppCompatActivity implements
                  Log.e("lat",latitude+"");
                  Log.e("long",longitude+"");
 
-       /* Bitmap.Config conf = Bitmap.Config.ARGB_8888;
-        Bitmap bmp = Bitmap.createBitmap(80, 80, conf);
 
-        Bitmap resized = Bitmap.createScaledBitmap(bmp, 40, 40, true);
-*/
-        /*Bitmap bmpp = Bitmap.createScaledBitmap(orginalBitmap, 40, 40, true);
-        Bitmap.Config conf = Bitmap.Config.ARGB_8888;
-*/
-                 //      Canvas canvas1 = new Canvas(resized);
-
-                 //Bitmap bmpp = Bitmap.createScaledBitmap(orginalBitmap, 40, 40, true);
-// paint defines the text color, stroke width and size
-      /*  Paint color = new Paint();
-        color.setTextSize(35);
-        color.setColor(Color.BLUE);*/
-
-// modify canvas
-       /* canvas1.drawBitmap(BitmapFactory.decodeResource(getResources(),
-                R.drawable.amir), 0,0, color);
-*/
-// add marker to Map
-       /* Marker marker = mMap.addMarker(new MarkerOptions().position(latLngg)
-                .icon(BitmapDescriptorFactory.fromBitmap(resized))
-                // Specifies the anchor to be at a particular point in the marker image.
-                .anchor(0.5f, 1));
-       */    // mMap.addMarker(new MarkerOptions().position(latLngg).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-                 /// Marker marker = mMap.addMarker(new MarkerOptions().position(latLngg).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).title("mayank nayyar"));
-                 // Marker marker = mMap.addMarker(new MarkerOptions().position(latLngg).icon(BitmapDescriptorFactory.fromResource(R.drawable.mark)));
-                 // marker.showInfoWindow();
-
-/*
-        Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(),
-                R.drawable.marker3);
-
-        Bitmap bmp2 = bitmap1.copy(bitmap1.getConfig(), true);*/
-
-       /* Bitmap.Config conf = Bitmap.Config.ARGB_8888;
-        Bitmap bitmap1 = Bitmap.createBitmap(BitmapFactory.decodeResource(getResources(),
-                R.drawable.markk));*/
-       /* Bitmap bitmap2  = Bitmap.createBitmap(BitmapFactory.decodeResource(getResources(),
-                R.drawable.hot));
-
-        Bitmap hott = bitmap2.copy(bitmap2.getConfig(), true);
-       int bitmap1Width = bitmap1.getWidth();
-        int bitmap1Height = bitmap1.getHeight();
-        int bitmap2Width = bitmap2.getWidth();
-        int bitmap2Height = bitmap2.getHeight();
-
-        float marginLeft = (float) (bitmap1Width * 0.5 - bitmap2Width * 0.5);
-        float marginTop = (float) (bitmap1Height * 0.5 - bitmap2Height * 0.5);
-*/
-
-       /*Bitmap overlayBitmap = Bitmap.createBitmap(BitmapFactory.decodeResource(getResources(),
-               R.drawable.markk));
-       */
-
-        /*Canvas canvas = new Canvas(bmp2);
-
-        canvas.drawBitmap(BitmapFactory.decodeResource(getResources(),
-                R.drawable.markk), new Matrix(), null);
-        canvas.drawBitmap(BitmapFactory.decodeResource(getResources(),
-               R.drawable.hot), marginLeft, marginTop, null);
-*/
 
                  String text = name;
                  Bitmap b = Bitmap.createBitmap(650, 240, Bitmap.Config.ARGB_8888);
@@ -507,13 +431,11 @@ public class MapsActivity extends AppCompatActivity implements
                          .draggable(true)
                          .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
 
-                 //marker.showInfoWindow();
 
                  mMap.moveCamera(CameraUpdateFactory.newLatLng(latLngg));
                  mMap.getUiSettings().setScrollGesturesEnabled(true);
 
 
-                 //Animating the camera
                  mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
 
                  markers.add(marker);
@@ -533,22 +455,8 @@ public class MapsActivity extends AppCompatActivity implements
 
                          try
                          {
-                             /*Log.e("inside","try");
-                             friendName.add("Mayank");
-                             friendName.add("Vaibhav");
-                             friendName.add("Dopu");
-                             friendName.add("harshit");
-                             friendName.add("may");
-                             friendName.add("Dope");
-                             friendName.add("M");
-                             friendName.add("V");
-                             friendName.add("D");
 
-                             contact.put("9871656573", "Mayank");
-                             contact.put("9643023359", "Vaibhav");
-                             contact.put("999105616", "Deepali");
-                             contact.put("7503104261", "Harshit");
-*/
+
 
                              for(String key : contact.keySet()){
 
@@ -560,15 +468,6 @@ public class MapsActivity extends AppCompatActivity implements
                                  check_flag = makeConnection("http://192.168.43.3/retrieveContact.php");
                              }
 
-                            /* if (check_flag) {
-
-                                 check_flag = generatePostRequest();
-                             }
-
-                             if (check_flag) {
-
-                                 return getRequestResponse();
-                             }*/
 
                              for (;;)
                              {
@@ -590,104 +489,24 @@ public class MapsActivity extends AppCompatActivity implements
                                              if (ress != null) {
                                                  try {
 
-              /* *//* Log.e("before","object");  ------
-                Log.e("the value of ma.res",ma.res);
-                JSONObject obj = new JSONObject(ma.res); ---------
-               *//* //JSONArray j = new JSONArray();
-                // /JSONArray arr = obj.getJSONArray("ress");
-                *//*String pname = obj.getString("name"); -----
-                String Lat = obj.getString("Lat");
-                float Latf = Float.parseFloat(Lat);
-
-                String Lng = obj.getString("Lng");
-                float Longf = Float.parseFloat(Lng); ----
-                *//*// int length = arr.length();
-              *//*  Log.e("the value object",pname); ----
-                Log.e("value of Lat",Lat);
-                Log.e("value of Long",Lng); -------
-              *//*  // String ss = arr.getString("mes");
-
-                *//*String recvd_text = "";
-                for (int i = 0; i < length; i++) {
-                    JSONObject obj3 = (JSONObject) arr.get(i);
-                    String s = obj3.getString("mes");
-                    //String bname = obj3.getString("Email");
-                    Log.e("ans--->> ",s);
-
-                }
-*//*
-              //  ma.MMap(Latf, Longf, pname);
-
-              */
 
                                                      Log.e("before", "object");
                                                      Log.e("the value of ma.res", ress);
                                                      JSONObject obj = new JSONObject(ress);
-                                                     //Log.e("this is", obj+"");
-                                                     //JSONArray j = new JSONArray();
-                                                     // /JSONArray arr = obj.getJSONArray("ress");
+
                                                      String ss = obj.getString("mes");
-                                                     // int length = arr.length();
+
                                                      Log.e("the value object", ss + "this should be sex bro");
                                                      if (ss.equals("abc")) {
                                                          Log.e("this is fucking", "idiotic");
 
-                                                         //context.startActivity(new Intent(context, MapsActivity.class));
 
                                                      }
-                                                     // String ss = arr.getString("mes");
 
-                /*String recvd_text = "";
-                for (int i = 0; i < length; i++) {
-                    JSONObject obj3 = (JSONObject) arr.get(i);
-                    String s = obj3.getString("mes");
-                    //String bname = obj3.getString("Email");
-                    Log.e("ans--->> ",s);
-
-                }
-
-
-*/
                                                  } catch (JSONException e) {
                                                      e.printStackTrace();
                                                  }
                                              }
-                                         /*    double latitude = 28.6139;
-                                             double longitude = 77.2090;
-                                             String name = "";
-
-                                             if(i!=0) {
-                                                 for (int k = 0; k < markers.size(); k++) {
-                                                     Marker m = markers.get(k);
-                                                     m.remove();
-                                                     Marker mm = markerNames.get(k);
-                                                     mm.remove();
-                                                 }
-                                             }
-                                             for (int j = 0; j < 3; j++) {
-                                                 if(i==0)
-                                                 {
-                                                     latitude = latitude/2;
-
-
-                                                 }
-                                                 if(i==1)
-                                                 {
-                                                     longitude = longitude/2;
-                                                 }
-                                                 if(i==2)
-                                                 {
-                                                     latitude = latitude/2;
-                                                     longitude = longitude/2;
-                                                 }
-                                                 latitude = latitude + (3*j);
-                                                 longitude += (4*j);
-                                                 name = friendName.get(j + kk);
-                                                 Log.e("the value of i+j",(j + kk) + "");
-                                                 Log.e("the value of friend",name);
-                                                 getUpdatedCurrentLocation(latitude, longitude, name);
-                                             }
-                                             kk += 3;*/
                                          }
                                          catch(Exception e)
                                          {
@@ -728,24 +547,10 @@ public class MapsActivity extends AppCompatActivity implements
 
              public boolean generatePostRequest() {
                  try {
-                     //String nameStr = name.toString();
-                    /* String nameStr = "this is  mayank the sex and handjob";
-                     String eMailStr = "sex@600";//eMail.toString();
-                     String passWordStr = "sexyy";//passWord.toString();
-*//*
-                     Log.e("this is email",eMailStr);
-                     Log.e("this is pass",passWordStr);
-                     Log.e("this is name",nameStr);*/
+
                      List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-                     /*nameValuePairs.add(new BasicNameValuePair("name", nameStr));
-                     nameValuePairs.add(new BasicNameValuePair("email", eMailStr));
-                     nameValuePairs.add(new BasicNameValuePair("password", passWordStr));*/
+
                      nameValuePairs.add(new BasicNameValuePair("numberString", toSend));
-
-
-           /* List<NameValuePair> urlParameters = new ArrayList<NameValuePair>(1);
-            urlParameters.add(new BasicNameValuePair("name", name));
-           */// urlParameters.add(new BasicNameValuePair("phone", aphone));
 
                      ResponseHandler<String> responseHandler = new BasicResponseHandler();
                      post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
@@ -775,150 +580,5 @@ public class MapsActivity extends AppCompatActivity implements
                      return null;
                  }
              }
-
-
-
-
-
          }
 
-/*
-class LoadTaskAgain extends AsyncTask<String, String, String> {
-
-    MapsActivity ma  = new MapsActivity();
-    boolean check_flag = true;
-   */
-/* Context context;
-    public LoadTask(Context context) {
-        this.context = context.getApplicationContext();
-    }*//*
-
-
-
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-        Log.e("inside","pre");
-    }
-
-    protected String doInBackground(String... params) {
-        if (check_flag) {
-
-            check_flag = ma.makeConnection(params[0]);
-        }
-
-        if (check_flag) {
-
-            check_flag = ma.generatePostRequest();
-        }
-
-        if (check_flag) {
-
-            return ma.getRequestResponse();
-        }
-
-        return null; // null is returned if request failed
-
-
-    }
-
-    @Override
-    protected void onPostExecute(String res) {
-
-        if (ma.res != null) {
-            try {
-
-              */
-/* *//*
-*/
-/* Log.e("before","object");  ------
-                Log.e("the value of ma.res",ma.res);
-                JSONObject obj = new JSONObject(ma.res); ---------
-               *//*
-*/
-/* //JSONArray j = new JSONArray();
-                // /JSONArray arr = obj.getJSONArray("ress");
-                *//*
-*/
-/*String pname = obj.getString("name"); -----
-                String Lat = obj.getString("Lat");
-                float Latf = Float.parseFloat(Lat);
-
-                String Lng = obj.getString("Lng");
-                float Longf = Float.parseFloat(Lng); ----
-                *//*
-*/
-/*//*
-/ int length = arr.length();
-              *//*
-*/
-/*  Log.e("the value object",pname); ----
-                Log.e("value of Lat",Lat);
-                Log.e("value of Long",Lng); -------
-              *//*
-*/
-/*  // String ss = arr.getString("mes");
-
-                *//*
-*/
-/*String recvd_text = "";
-                for (int i = 0; i < length; i++) {
-                    JSONObject obj3 = (JSONObject) arr.get(i);
-                    String s = obj3.getString("mes");
-                    //String bname = obj3.getString("Email");
-                    Log.e("ans--->> ",s);
-
-                }
-*//*
-*/
-/*
-              //  ma.MMap(Latf, Longf, pname);
-
-              *//*
-
-
-                Log.e("before", "object");
-                Log.e("the value of ma.res", ma.res);
-                JSONObject obj = new JSONObject(ma.res);
-                //Log.e("this is", obj+"");
-                //JSONArray j = new JSONArray();
-                // /JSONArray arr = obj.getJSONArray("ress");
-                String ss = obj.getString("mes");
-                // int length = arr.length();
-                Log.e("the value object", ss + "this should be sex bro");
-                if (ss.equals("abc")) {
-                    Log.e("this is fucking", "idiotic");
-
-                    //context.startActivity(new Intent(context, MapsActivity.class));
-
-                }
-                // String ss = arr.getString("mes");
-
-                */
-/*String recvd_text = "";
-                for (int i = 0; i < length; i++) {
-                    JSONObject obj3 = (JSONObject) arr.get(i);
-                    String s = obj3.getString("mes");
-                    //String bname = obj3.getString("Email");
-                    Log.e("ans--->> ",s);
-
-                }
-
-
-*//*
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        // Toast.makeText(this,ma.id,Toast.LENGTH_LONG).show();
-        Log.e("task done","bitchess!!!1");
-
-        super.onPostExecute(ma.res);
-
-    }
-
-
-
-}
-*/

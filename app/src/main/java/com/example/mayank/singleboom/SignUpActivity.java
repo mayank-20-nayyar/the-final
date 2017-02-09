@@ -141,17 +141,21 @@ public class SignUpActivity extends AppCompatActivity {
     public boolean generatePostRequest() {
         try {
             //String nameStr = name.toString();
-            String nameStr = "this is  mayank the sex and handjob";
-            String eMailStr = "sex@600";//eMail.toString();
-            String passWordStr = "sexyy";//passWord.toString();
+            String nameStr = _nameText.getText().toString();
+            String eMailStr = _emailText.getText().toString();
+            String passWordStr = _passwordText.getText().toString();
+            String phoneStr=_mobile.getText().toString();
 
             Log.e("this is email",eMailStr);
             Log.e("this is pass",passWordStr);
             Log.e("this is name",nameStr);
+            Log.e("this is phone",phoneStr);
+
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
             nameValuePairs.add(new BasicNameValuePair("name", nameStr));
             nameValuePairs.add(new BasicNameValuePair("email", eMailStr));
             nameValuePairs.add(new BasicNameValuePair("password", passWordStr));
+            nameValuePairs.add(new BasicNameValuePair("phoneNumber", phoneStr));
 
 
            /* List<NameValuePair> urlParameters = new ArrayList<NameValuePair>(1);
@@ -192,7 +196,7 @@ public class SignUpActivity extends AppCompatActivity {
     public void nextStep(){
         Log.e("this is in nextStep","this");
         //Log.e("app context", getApplicationContext()+"");
-        Intent i = new Intent(SignUpActivity.this, MapsActivity.class);
+        Intent i = new Intent(SignUpActivity.this, LoginActivity.class);
         startActivity(i);
     }
 
@@ -321,6 +325,10 @@ class LoadTaskLoginSignUp extends AsyncTask<String, String, String> {
 
                     //context.startActivity(new Intent(context, MapsActivity.class));
                     ma.nextStep();
+                }
+                else
+                {
+                    ma.onSignupFailed();
                 }
 
             } catch (JSONException e) {
