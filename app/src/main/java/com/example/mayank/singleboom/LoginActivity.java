@@ -31,6 +31,8 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -204,6 +206,10 @@ public class LoginActivity extends AppCompatActivity {
 
     public void nextStep(){
         Log.e("this is in nextStep","this");
+        
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString("username", number);
         //Log.e("app context", getApplicationContext()+"");
         Intent i = new Intent(LoginActivity.this, MapsActivity.class);
         startActivity(i);
