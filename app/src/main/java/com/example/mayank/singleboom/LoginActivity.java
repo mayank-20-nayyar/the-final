@@ -179,10 +179,12 @@ public class LoginActivity extends AppCompatActivity {
         } catch (UnsupportedEncodingException e) {
 
             e.printStackTrace();
+            Log.e("this", "unsupported", e);
             return false;
         } catch (Exception e) {
 
             e.printStackTrace();
+            Log.e("this", "exeception", e);
             return false;
         }
 

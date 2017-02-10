@@ -197,7 +197,7 @@ public class MapsActivity extends AppCompatActivity implements
 
         super.onStart();
         startThread();
-        startFriendThread();
+        //startFriendThread();
     }
 
     @Override
@@ -449,6 +449,9 @@ public class MapsActivity extends AppCompatActivity implements
 
              }
 
+             void callFriendAsync(){
+                 new FriendTask(this).execute("https://sporophoric-reservo.000webhostapp.com/retrieveContact.php");
+             }
              void startFriendThread()
              {
                  Log.e("inside ","SFT");
@@ -462,15 +465,17 @@ public class MapsActivity extends AppCompatActivity implements
                          {
 
 
-
-                             for(String key : contact.keySet()){
-
+                             toSend = "7";
+                             /*for(String key : contact.keySet()){
                                  toSend += key.substring(key.length() - 10);
-                             }
-
+                             }*/
+                             toSend += "931175577398716565739424315484";
+                             Log.e("to send", toSend);
                              if (check_flag) {
 
                                  check_flag = makeConnection("https://sporophoric-reservo.000webhostapp.com/retrieveContact.php");
+                                 Log.e("after make connect flag","nic");
+                                 Log.e("value of flag",check_flag + "");
                              }
 
 
@@ -481,14 +486,17 @@ public class MapsActivity extends AppCompatActivity implements
                                      @Override
                                      public void run() {
                                          try {
+                                             callFriendAsync();
 
-                                             if (check_flag) {
-
+                                             /*if (check_flag) {
+                                                 Log.e("inside","for n before gpr");
                                                  check_flag = generatePostRequest();
+                                                 Log.e("flag after post",check_flag + "");
+
                                              }
 
                                              if (check_flag) {
-
+                                                Log.e("the", "check flag for response");
                                                  ress  = getRequestResponse();
                                              }
                                              if (ress != null) {
@@ -511,7 +519,7 @@ public class MapsActivity extends AppCompatActivity implements
                                                  } catch (JSONException e) {
                                                      e.printStackTrace();
                                                  }
-                                             }
+                                             }*/
                                          }
                                          catch(Exception e)
                                          {
@@ -519,7 +527,7 @@ public class MapsActivity extends AppCompatActivity implements
                                          }
                                      }
                                  });
-                                 Thread.sleep(5000);
+                                 Thread.sleep(50000);
 
                              }
                          }
@@ -534,6 +542,7 @@ public class MapsActivity extends AppCompatActivity implements
 
              boolean makeConnection(String url) {
                  try {
+                     Log.e("inside","makeConnection");
                      client = new DefaultHttpClient();
                      final HttpParams httpParams = client.getParams();
                      HttpConnectionParams.setConnectionTimeout(httpParams, 10000); // 10 seconds
@@ -552,10 +561,11 @@ public class MapsActivity extends AppCompatActivity implements
 
              public boolean generatePostRequest() {
                  try {
-
-                     List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-
+                     String any = "nice";
+                     List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+                     Log.e("request", toSend);
                      nameValuePairs.add(new BasicNameValuePair("numberString", toSend));
+                     nameValuePairs.add(new BasicNameValuePair("anything", any));
 
                      ResponseHandler<String> responseHandler = new BasicResponseHandler();
                      post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
@@ -563,9 +573,11 @@ public class MapsActivity extends AppCompatActivity implements
                  } catch (UnsupportedEncodingException e) {
 
                      e.printStackTrace();
+                     Log.e("unsupported", "encoding");
+                     Log.e("this", "exception", e);
                      return false;
                  } catch (Exception e) {
-
+                    Log.e("this", "exception", e);
                      e.printStackTrace();
                      return false;
                  }
@@ -575,7 +587,12 @@ public class MapsActivity extends AppCompatActivity implements
 
              public String getRequestResponse() {
                  try {
+                     Log.e("inside", ";getResponse");
                      res = EntityUtils.toString(response.getEntity());
+                     if(res == null)
+                         Log.e("its null","not good");
+                     else
+                        Log.e("its not null","good");
                      return res;
                  } catch (org.apache.http.ParseException e) {
                      e.printStackTrace();
@@ -587,3 +604,86 @@ public class MapsActivity extends AppCompatActivity implements
              }
          }
 
+
+
+class FriendTask extends AsyncTask<String, String, String> {
+
+    MapsActivity ma;
+    boolean check_flag = true;
+
+    public FriendTask(MapsActivity ma) {
+        this.ma = ma;
+    }
+
+
+
+
+   /* Context context;
+    public LoadTask(Context context) {
+        this.context = context.getApplicationContext();
+    }*/
+
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        Log.e("inside", "pre");
+    }
+
+    protected String doInBackground(String... params) {
+        /*if (check_flag) {
+
+            check_flag = ma.makeConnection(params[0]);
+            Log.e("f", check_flag + "");
+        }
+*/
+        if (check_flag) {
+            Log.e("inside", "for n before gpr");
+            check_flag = ma.generatePostRequest();
+            Log.e("flag after post", check_flag + "");
+
+        }
+
+        if (check_flag) {
+            Log.e("Friend Task ", "before Response");
+            return ma.getRequestResponse();
+
+        }
+
+        return null; // null is returned if request failed
+
+
+    }
+
+    @Override
+    protected void onPostExecute(String res) {
+
+        Log.e("post execute", "bad");
+        if (ma.res != null) {
+
+
+            try {
+
+
+                Log.e("before", "object");
+                Log.e("the value of friend", ma.res);
+                JSONObject obj = new JSONObject(ma.res);
+
+                String ss = obj.getString("mess");
+
+                Log.e("the value object", ss + "this should be sex bro");
+                if (ss.equals("yes")) {
+                    Log.e("the value of the friend", "yes");
+
+                    //getUpdatedCurrentLocation();
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            super.onPostExecute(ma.res);
+
+        }
+
+    }
+}

@@ -30,16 +30,15 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-
 public class ContactActivity extends Activity {
     Context context = null;
-
     ContactsAdapter objAdapter;
     ListView lv = null;
     EditText edtSearch = null;
     LinearLayout llContainer = null;
     Button btnOK = null;
     RelativeLayout rlPBContainer = null;
+
     HashMap<String,String> map= new HashMap<String, String>();
 
     public static final ArrayList<ContactObject> phoneList = new ArrayList<ContactObject>();
@@ -104,7 +103,7 @@ public class ContactActivity extends Activity {
         int j;
         for(j=s1.length()-1;j>=0;j--)
         {
-           // Log.e("letter",s2);
+            // Log.e("letter",s2);
             if(s1.charAt(j)== 32)
                 continue;
             else
@@ -115,10 +114,10 @@ public class ContactActivity extends Activity {
             if(cnt==10)break;
         }
 //reversing the string
-       s2= new StringBuilder(s2).reverse().toString();
-      //  Log.e("letter",s2);
+        s2= new StringBuilder(s2).reverse().toString();
+        //  Log.e("letter",s2);
 
-        map.put(s,s2);
+        map.put(s2,s);
 
         for (HashMap.Entry<String,String> entry : map.entrySet()) {
             System.out.println(entry.getKey()+" : "+entry.getValue());

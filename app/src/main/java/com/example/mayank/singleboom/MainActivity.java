@@ -213,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
     public void nextStep(){
         Log.e("this is in nextStep","this");
         //Log.e("app context", getApplicationContext()+"");
-        Intent i = new Intent(MainActivity.this, MapsActivity.class);
+        Intent i = new Intent(MainActivity.this, ContactActivity.class);
         startActivity(i);
     }
 
