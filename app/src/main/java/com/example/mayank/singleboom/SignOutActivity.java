@@ -30,7 +30,7 @@ public class SignOutActivity extends AppCompatActivity {
                         SharedPreferences.Editor editor = settings.edit();
                         editor.remove("username");
 
-                        Intent i=new Intent(this,ChooseActivity.class);
+                        Intent i=new Intent(getApplicationContext(),ChooseActivity.class);
                         startActivity(i);
                         // continue with delete
                     }
