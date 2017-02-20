@@ -97,6 +97,7 @@ public class MapsActivity extends AppCompatActivity implements
              public List<Marker> markerNames = new ArrayList<Marker>();
              public List<String> friendName = new ArrayList<String>();
              public HashMap<String, String> contact = new HashMap<String, String>();
+             public HashMap<String, String> phoneLatlng = new HashMap<String, String>();
              public BoomMenuButton bmb;
 
 
@@ -110,6 +111,8 @@ public class MapsActivity extends AppCompatActivity implements
              public String res;
              public String ress;
              boolean check_flag = true;
+
+             FriendTask ft;
 
             private GoogleApiClient googleApiClient;
 
@@ -275,7 +278,7 @@ public class MapsActivity extends AppCompatActivity implements
                          .title("Current Location")); //Adding a title
 
 
-                 mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                 //mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
 
                  Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
@@ -294,7 +297,7 @@ public class MapsActivity extends AppCompatActivity implements
 
                      longitude = location.getLongitude();
                      latitude = location.getLatitude();
-                     mMap.animateCamera(CameraUpdateFactory.zoomTo(40));
+                     mMap.animateCamera(CameraUpdateFactory.zoomTo(2));
 
 
                      updateMoveMap();
@@ -397,7 +400,27 @@ public class MapsActivity extends AppCompatActivity implements
         };
         th.start();
     }
-             public void getUpdatedCurrentLocation(double latitude, double longitude, String name) {
+
+             public void extractLatLng()
+             {
+                 for(HashMap.Entry<String, String> entry : phoneLatlng.entrySet()){
+                     String phone = entry.getKey();
+                     String latlng = entry.getValue();
+                     String name = "";
+                     String[] LL = latlng.split(",");
+                     float latitude = Float.parseFloat(LL[0]);
+                     float longitude = Float.parseFloat(LL[1]);
+
+                     for(HashMap.Entry<String, String> entry1 : contact.entrySet()){
+                         String phone1 = entry1.getKey();
+                         if(phone.equals(phone1.substring(phone1.length() - 10))){
+                             name = entry1.getValue();
+                         }
+                     }
+                     getUpdatedCurrentLocation(latitude, longitude, name);
+                 }
+             }
+             public void getUpdatedCurrentLocation(Float latitude, Float longitude, String name) {
                  if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                      // TODO: Consider calling
 
@@ -441,7 +464,7 @@ public class MapsActivity extends AppCompatActivity implements
                  mMap.getUiSettings().setScrollGesturesEnabled(true);
 
 
-                 mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+                 mMap.animateCamera(CameraUpdateFactory.zoomTo(2));
 
                  markers.add(marker);
                  markerNames.add(markerName);
@@ -459,17 +482,25 @@ public class MapsActivity extends AppCompatActivity implements
 
                      @Override
                      public void run(){
-                         //
 
                          try
                          {
 
-
                              toSend = "7";
-                             /*for(String key : contact.keySet()){
+                             if(!contact.containsKey("9311755773"))
+                                 contact.put("9311755773", "mridushi");
+
+                             if(!contact.containsKey("9871656573"))
+                                 contact.put("9871656573", "mayank");
+
+                             if(!contact.containsKey("9424315484"))
+                                 contact.put("9424315484", "mummy");
+
+
+                             for(String key : contact.keySet()){
                                  toSend += key.substring(key.length() - 10);
-                             }*/
-                             toSend += "931175577398716565739424315484";
+                             }
+                             //toSend += "931175577398716565739424315484";
                              Log.e("to send", toSend);
                              if (check_flag) {
 
@@ -488,38 +519,6 @@ public class MapsActivity extends AppCompatActivity implements
                                          try {
                                              callFriendAsync();
 
-                                             /*if (check_flag) {
-                                                 Log.e("inside","for n before gpr");
-                                                 check_flag = generatePostRequest();
-                                                 Log.e("flag after post",check_flag + "");
-
-                                             }
-
-                                             if (check_flag) {
-                                                Log.e("the", "check flag for response");
-                                                 ress  = getRequestResponse();
-                                             }
-                                             if (ress != null) {
-                                                 try {
-
-
-                                                     Log.e("before", "object");
-                                                     Log.e("the value of friend", ress);
-                                                     JSONObject obj = new JSONObject(ress);
-
-                                                     String ss = obj.getString("mess");
-
-                                                     Log.e("the value object", ss + "this should be sex bro");
-                                                     if (ss.equals("yes")) {
-                                                         Log.e("the value of the friend","yes");
-
-                                                        //getUpdatedCurrentLocation();
-                                                     }
-
-                                                 } catch (JSONException e) {
-                                                     e.printStackTrace();
-                                                 }
-                                             }*/
                                          }
                                          catch(Exception e)
                                          {
@@ -527,7 +526,7 @@ public class MapsActivity extends AppCompatActivity implements
                                          }
                                      }
                                  });
-                                 Thread.sleep(50000);
+                                 Thread.sleep(200000);
 
                              }
                          }
@@ -545,8 +544,8 @@ public class MapsActivity extends AppCompatActivity implements
                      Log.e("inside","makeConnection");
                      client = new DefaultHttpClient();
                      final HttpParams httpParams = client.getParams();
-                     HttpConnectionParams.setConnectionTimeout(httpParams, 10000); // 10 seconds
-                     HttpConnectionParams.setSoTimeout(httpParams, 10000);
+                     HttpConnectionParams.setConnectionTimeout(httpParams, 30000); // 10 seconds
+                     HttpConnectionParams.setSoTimeout(httpParams, 30000);
 
                      post = new HttpPost("https://sporophoric-reservo.000webhostapp.com/retrieveContact.php");
 
@@ -611,18 +610,12 @@ class FriendTask extends AsyncTask<String, String, String> {
     MapsActivity ma;
     boolean check_flag = true;
 
+
+
+
     public FriendTask(MapsActivity ma) {
         this.ma = ma;
     }
-
-
-
-
-   /* Context context;
-    public LoadTask(Context context) {
-        this.context = context.getApplicationContext();
-    }*/
-
 
     @Override
     protected void onPreExecute() {
@@ -631,12 +624,8 @@ class FriendTask extends AsyncTask<String, String, String> {
     }
 
     protected String doInBackground(String... params) {
-        /*if (check_flag) {
 
-            check_flag = ma.makeConnection(params[0]);
-            Log.e("f", check_flag + "");
-        }
-*/
+
         if (check_flag) {
             Log.e("inside", "for n before gpr");
             check_flag = ma.generatePostRequest();
@@ -650,7 +639,7 @@ class FriendTask extends AsyncTask<String, String, String> {
 
         }
 
-        return null; // null is returned if request failed
+        return null;
 
 
     }
@@ -675,7 +664,13 @@ class FriendTask extends AsyncTask<String, String, String> {
                 if (ss.equals("yes")) {
                     Log.e("the value of the friend", "yes");
 
-                    //getUpdatedCurrentLocation();
+                    for(String key : ma.contact.keySet()){
+                        ma.phoneLatlng.put(key.substring(key.length() - 10), obj.getString(key.substring(key.length() - 10)));
+                        Log.e("key", key);
+                        Log.e("the value", (String) ma.phoneLatlng.get(key.substring(key.length() - 10)));
+                    }
+
+                    ma.extractLatLng();
                 }
 
             } catch (JSONException e) {
