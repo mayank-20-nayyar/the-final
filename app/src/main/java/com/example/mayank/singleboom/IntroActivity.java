@@ -20,7 +20,6 @@ import com.github.paolorotolo.appintro.AppIntro2;
 import com.github.paolorotolo.appintro.AppIntroFragment;
 
 public class IntroActivity extends AppIntro2{
-
     int flag=0;
     @Override
     public void onCreate(Bundle savedInstanceState) {

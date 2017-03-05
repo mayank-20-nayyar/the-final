@@ -111,10 +111,14 @@ public class MainActivity extends AppCompatActivity {
     HttpResponse response;
     // Context context;
     public String res;
+//SessionManagement session;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+      //  session = new SessionManagement(getApplicationContext());
+    //    session.checkLogin();
+
         b = (Button) findViewById(R.id.button);
         name = (EditText) findViewById(R.id.editText);
         eMail = (EditText) findViewById(R.id.editText3);

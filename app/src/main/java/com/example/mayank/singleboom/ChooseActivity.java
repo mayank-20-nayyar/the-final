@@ -11,20 +11,30 @@ import android.view.animation.AnimationUtils;
 import android.graphics.*;
 import com.dd.CircularProgressButton;
 import com.example.mayank.singleboom.R;
+
+import java.util.HashMap;
+
 /**
  * Created by Mayank on 2/4/2017.
  */
 public class ChooseActivity extends AppCompatActivity{
-
+SessionManagement session;
     Animation animFadein;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        session = new SessionManagement(getApplicationContext());
+
+        session.checkLogin();
         setContentView(R.layout.ac_sample_1);
+
+
 
         final CircularProgressButton circularButton1 = (CircularProgressButton) findViewById(R.id.circularButton1);
         circularButton1.setBackgroundColor(Color.TRANSPARENT);
         circularButton1.setIndeterminateProgressMode(true);
+
+
 
         //    Button button=(Button)findViewById(R.id.button);
         //   Button button1=(Button)findViewById(R.id.button2);

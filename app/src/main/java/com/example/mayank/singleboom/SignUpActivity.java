@@ -55,11 +55,14 @@ public class SignUpActivity extends AppCompatActivity {
     HttpResponse response;
     // Context context;
     public String res;
-
+//SessionManagement session;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+  //      session = new SessionManagement(getApplicationContext());
+    //    session.checkLogin();
+
         ButterKnife.inject(this);
 
         _signupButton.setOnClickListener(new View.OnClickListener() {

@@ -38,6 +38,7 @@ public class ContactActivity extends Activity {
     LinearLayout llContainer = null;
     Button btnOK = null;
     RelativeLayout rlPBContainer = null;
+  //  SessionManagement session;
 
     HashMap<String,String> map= new HashMap<String, String>();
 
@@ -48,6 +49,10 @@ public class ContactActivity extends Activity {
         super.onCreate(savedInstanceState);
         context = this;
         setContentView(R.layout.activity_contact);
+    //    session = new SessionManagement(getApplicationContext());
+//        session.checkLogin();
+
+
         rlPBContainer = (RelativeLayout) findViewById(R.id.pbcontainer);
         edtSearch = (EditText) findViewById(R.id.input_search);
         llContainer = (LinearLayout) findViewById(R.id.data_container);
@@ -71,6 +76,7 @@ public class ContactActivity extends Activity {
                 // When user changed the Text
                 String text = edtSearch.getText().toString()
                         .toLowerCase(Locale.getDefault());
+              //  addContactsInList();
                 objAdapter.filter(text);
             }
             @Override

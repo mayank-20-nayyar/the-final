@@ -10,13 +10,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 public class SignOutActivity extends AppCompatActivity {
-
+    SessionManagement session;
 //    public Context mcontext;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
   //      setContentView(R.layout.activity_main);
 
+        session = new SessionManagement(getApplicationContext());
+        session.checkLogin();
 
 
         AlertDialog.Builder ab = new AlertDialog.Builder(SignOutActivity.this);
@@ -26,12 +28,9 @@ public class SignOutActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                      //   finish();
 
-                        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                        SharedPreferences.Editor editor = settings.edit();
-                        editor.remove("username");
-
-                        Intent i=new Intent(getApplicationContext(),ChooseActivity.class);
-                        startActivity(i);
+                        session.logoutUser();
+                        Intent ii =new Intent(SignOutActivity.this,ChooseActivity.class);
+                        startActivity(ii);
                         // continue with delete
                     }
                 })

@@ -61,6 +61,7 @@ public class LoginActivity extends AppCompatActivity {
     HttpResponse response;
     // Context context;
     public String res;
+    SessionManagement session;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,8 +69,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.inject(this);
 
-
-
+        session = new SessionManagement(getApplicationContext());
+  //      session.checkLogin();
 
         loginButton.setOnClickListener(new View.OnClickListener() {
 
@@ -106,6 +107,8 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Authenticating...");
         progressDialog.show();
+
+        progressDialog.dismiss();
 
         email = emailText.getText().toString();
         password = passwordText.getText().toString();
@@ -208,13 +211,16 @@ public class LoginActivity extends AppCompatActivity {
 
     public void nextStep(){
         Log.e("this is in nextStep","this");
-        
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putString("username", number);
-        //Log.e("app context", getApplicationContext()+"");
-        Intent i = new Intent(LoginActivity.this, MapsActivity.class);
+        Toast.makeText(getApplicationContext(), "User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG).show();
+
+        session.createLoginSession("9643023359","vaibhav@gmail.com");
+//Log.e("name",number);
+  //      Log.e("email",email);
+        // Staring MainActivity
+        Intent i = new Intent(getApplicationContext(), MapsActivity.class);
         startActivity(i);
+        finish();
+
     }
 
     @Override
@@ -274,6 +280,8 @@ public class LoginActivity extends AppCompatActivity {
 
         return valid;
     }
+
+
 }
 
 
@@ -363,6 +371,8 @@ class LoadTaskLogin extends AsyncTask<String, String, String> {
         super.onPostExecute(ma.res);
 
     }
+
+
 
 //    @Override
 //    public void onAttach(Activity activity){

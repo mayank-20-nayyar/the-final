@@ -72,8 +72,7 @@ public class MapsActivity extends AppCompatActivity implements
 
 
     private GoogleMap mMap;
-
-    public double longitude;
+       public double longitude;
     public double latitude;
              private static int[] imageResources = new int[]{
                      R.drawable.friends,
@@ -134,8 +133,6 @@ public class MapsActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_maps);
         bmb = (BoomMenuButton) findViewById(R.id.bmb);
 
-
-
         for (int i = 0; i < bmb.getPiecePlaceEnum().pieceNumber(); i++) {
             TextOutsideCircleButton.Builder builder = new TextOutsideCircleButton.Builder()
                     .listener(new OnBMClickListener() {
@@ -148,8 +145,8 @@ public class MapsActivity extends AppCompatActivity implements
                                 startActivityForResult(i1, 1);
                             }
                             if(index == 2) {
-                                //Intent i2 = new Intent(getApplicationContext(), SignOutActivity.class);
-                                //startActivity(i2);
+                                Intent i2 = new Intent(getApplicationContext(), SignOutActivity.class);
+                                startActivityForResult(i2,1);
                             }
 
 
