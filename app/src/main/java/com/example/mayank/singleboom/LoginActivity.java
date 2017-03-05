@@ -213,7 +213,7 @@ public class LoginActivity extends AppCompatActivity {
         Log.e("this is in nextStep","this");
         Toast.makeText(getApplicationContext(), "User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG).show();
 
-        session.createLoginSession("9643023359","vaibhav@gmail.com");
+        session.createLoginSession(number,email);
 //Log.e("name",number);
   //      Log.e("email",email);
         // Staring MainActivity
