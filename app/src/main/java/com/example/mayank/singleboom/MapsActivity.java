@@ -62,6 +62,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static com.example.mayank.singleboom.R.id.map;
+
 public class MapsActivity extends AppCompatActivity implements
         OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
@@ -161,7 +163,7 @@ public class MapsActivity extends AppCompatActivity implements
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+                .findFragmentById(map);
         mapFragment.getMapAsync(this);
 
         //Initializing googleapi client
@@ -208,7 +210,7 @@ public class MapsActivity extends AppCompatActivity implements
 
     //Getting current location
     public void getCurrentLocation() {
-        mMap.clear();
+        //mMap.clear();
         Log.e("inside","getcurrentlocation");
         //Creating a location object
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -227,7 +229,7 @@ public class MapsActivity extends AppCompatActivity implements
             Log.e("inside","getlocation");
             longitude = location.getLongitude();
             latitude = location.getLatitude();
-   mMap.animateCamera(CameraUpdateFactory.zoomTo(40));
+  // mMap.animateCamera(CameraUpdateFactory.zoomTo(40));
 
             //moving the map to location
             moveMap();
@@ -252,10 +254,10 @@ public class MapsActivity extends AppCompatActivity implements
                 .title("Current Location")); //Adding a title
 
         //Moving the camera
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        //mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
         //Animating the camera
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+       // mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
         //Displaying current coordinates in toast
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
@@ -282,7 +284,7 @@ public class MapsActivity extends AppCompatActivity implements
              }
 
              public void getUpdatedOwnLocation(){
-                 mMap.clear();
+                 //mMap.clear();
 
                  if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                      // TODO: Consider calling
@@ -294,7 +296,7 @@ public class MapsActivity extends AppCompatActivity implements
 
                      longitude = location.getLongitude();
                      latitude = location.getLatitude();
-                     mMap.animateCamera(CameraUpdateFactory.zoomTo(2));
+                     mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
 
 
                      updateMoveMap();
@@ -386,7 +388,7 @@ public class MapsActivity extends AppCompatActivity implements
                                 }
                             }
                         });
-                        Thread.sleep(2000);
+                        Thread.sleep(200000);
 
                     }
                 }
@@ -400,21 +402,25 @@ public class MapsActivity extends AppCompatActivity implements
 
              public void extractLatLng()
              {
+                 int flag = 0;
                  for(HashMap.Entry<String, String> entry : phoneLatlng.entrySet()){
-                     String phone = entry.getKey();
-                     String latlng = entry.getValue();
-                     String name = "";
-                     String[] LL = latlng.split(",");
-                     float latitude = Float.parseFloat(LL[0]);
-                     float longitude = Float.parseFloat(LL[1]);
 
-                     for(HashMap.Entry<String, String> entry1 : contact.entrySet()){
-                         String phone1 = entry1.getKey();
-                         if(phone.equals(phone1.substring(phone1.length() - 10))){
-                             name = entry1.getValue();
+                         String phone = entry.getKey();
+                         String latlng = entry.getValue();
+                         String name = "";
+                         String[] LL = latlng.split(",");
+                         float latitude = Float.parseFloat(LL[0]);
+                         float longitude = Float.parseFloat(LL[1]);
+
+                         for (HashMap.Entry<String, String> entry1 : contact.entrySet()) {
+                             String phone1 = entry1.getKey();
+                             if (phone.equals(phone1.substring(phone1.length() - 10))) {
+                                 name = entry1.getValue();
+                             }
                          }
-                     }
-                     getUpdatedCurrentLocation(latitude, longitude, name);
+                         getUpdatedCurrentLocation(latitude, longitude, name);
+                     //    flag++;
+
                  }
              }
              public void getUpdatedCurrentLocation(Float latitude, Float longitude, String name) {
@@ -424,7 +430,7 @@ public class MapsActivity extends AppCompatActivity implements
                      Log.e("inside ","to do consider");
                      return;
                  }
-                 Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+                 //Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
 
 
 
@@ -433,6 +439,8 @@ public class MapsActivity extends AppCompatActivity implements
 
                  Log.e("lat",latitude+"");
                  Log.e("long",longitude+"");
+                 Log.e("name",name);
+
 
 
 
@@ -457,11 +465,11 @@ public class MapsActivity extends AppCompatActivity implements
                          .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
 
 
-                 mMap.moveCamera(CameraUpdateFactory.newLatLng(latLngg));
+                 //mMap.moveCamera(CameraUpdateFactory.newLatLng(latLngg));
                  mMap.getUiSettings().setScrollGesturesEnabled(true);
 
 
-                 mMap.animateCamera(CameraUpdateFactory.zoomTo(2));
+                 mMap.animateCamera(CameraUpdateFactory.zoomTo(20));
 
                  markers.add(marker);
                  markerNames.add(markerName);
@@ -484,7 +492,7 @@ public class MapsActivity extends AppCompatActivity implements
                          {
 
                              toSend = "7";
-                             if(!contact.containsKey("9311755773"))
+                             /*if(!contact.containsKey("9311755773"))
                                  contact.put("9311755773", "mridushi");
 
                              if(!contact.containsKey("9871656573"))
@@ -492,9 +500,11 @@ public class MapsActivity extends AppCompatActivity implements
 
                              if(!contact.containsKey("9424315484"))
                                  contact.put("9424315484", "mummy");
+*/
 
 
                              for(String key : contact.keySet()){
+                                 Log.e("to be send", key);
                                  toSend += key.substring(key.length() - 10);
                              }
                              //toSend += "931175577398716565739424315484";
@@ -661,7 +671,14 @@ class FriendTask extends AsyncTask<String, String, String> {
                 if (ss.equals("yes")) {
                     Log.e("the value of the friend", "yes");
 
+
+                    Log.e("hashmap len", ma.contact.size() + "");
+                    for (Map.Entry<String, String> entry : ma.contact.entrySet()) {
+                        System.out.println(entry.getKey()+" : "+entry.getValue());
+                    }
                     for(String key : ma.contact.keySet()){
+                        Log.e("inside","for");
+                        Log.e("keyyy" ,key);
                         ma.phoneLatlng.put(key.substring(key.length() - 10), obj.getString(key.substring(key.length() - 10)));
                         Log.e("key", key);
                         Log.e("the value", (String) ma.phoneLatlng.get(key.substring(key.length() - 10)));
