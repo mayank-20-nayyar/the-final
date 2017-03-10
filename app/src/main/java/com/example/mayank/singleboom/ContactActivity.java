@@ -100,6 +100,7 @@ public class ContactActivity extends Activity {
                 sb.append(bean.getName());
                 sb1.append(bean.getNumber());
                 sb.append(",");
+                sb1.append(",");
             }
         }
         String s = sb.toString().trim();
@@ -107,26 +108,32 @@ public class ContactActivity extends Activity {
         String s2="";
         int cnt=0;
         int j;
-        for(j=s1.length()-1;j>=0;j--)
+        for(j=s1.length()-2;j>=0;j--)
         {
             // Log.e("letter",s2);
+            if(s1.charAt(j)==',') {
+                cnt = 0;
+                continue;
+            }
+            //Log.e("letter",s2);
             if(s1.charAt(j)== 32)
                 continue;
-            else
-                s2=s2+s1.charAt(j);
-            cnt++;
+            else {
+                if(cnt!=10) {
+                    s2 = s2 + s1.charAt(j);
+                    cnt++;
+                }
 
-
-            if(cnt==10)break;
+            }
         }
 //reversing the string
         s2= new StringBuilder(s2).reverse().toString();
-        //  Log.e("letter",s2);
+          Log.e("letter",s2);
 
         map.put(s2,s);
 
         for (HashMap.Entry<String,String> entry : map.entrySet()) {
-            System.out.println(entry.getKey()+" : "+entry.getValue());
+            Log.e("entryyy", entry.getKey()+" : "+entry.getValue());
         }
 
 

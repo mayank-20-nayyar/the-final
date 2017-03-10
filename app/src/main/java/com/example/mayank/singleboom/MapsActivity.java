@@ -146,10 +146,10 @@ public class MapsActivity extends AppCompatActivity implements
                                 Intent i1 = new Intent(getApplicationContext(), ContactActivity.class);
                                 startActivityForResult(i1, 1);
                             }
-                            if(index == 2) {
-                                Intent i2 = new Intent(getApplicationContext(), SignOutActivity.class);
-                                startActivityForResult(i2,1);
-                            }
+//                            if(index == 2) {
+//                                Intent i2 = new Intent(getApplicationContext(), SignOutActivity.class);
+//                                startActivityForResult(i2,1);
+//                            }
 
 
                         }
@@ -184,6 +184,7 @@ public class MapsActivity extends AppCompatActivity implements
                      if(resultCode == Activity.RESULT_OK){
 
                          contact = (HashMap<String, String>)data.getSerializableExtra("result");
+                         Log.e("contact",contact + " ");
                          startFriendThread();
 
                      }
